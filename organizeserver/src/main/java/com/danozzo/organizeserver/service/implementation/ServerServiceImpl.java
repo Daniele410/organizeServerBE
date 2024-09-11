@@ -1,6 +1,5 @@
 package com.danozzo.organizeserver.service.implementation;
 
-import com.danozzo.organizeserver.enumaration.Status;
 import com.danozzo.organizeserver.model.Server;
 import com.danozzo.organizeserver.repository.ServerRepository;
 import com.danozzo.organizeserver.service.ServerService;
@@ -12,11 +11,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 
+import static com.danozzo.organizeserver.enumaration.Status.SERVER_DOWN;
+import static com.danozzo.organizeserver.enumaration.Status.SERVER_UP;
 import static java.lang.Boolean.TRUE;
 
 @Service
@@ -34,13 +37,15 @@ public class ServerServiceImpl implements ServerService {
         return serverRepository.save(server);
     }
 
-    @SneakyThrows
+
     @Override
-    public Server ping(String ipAddress) {
+    public Server ping(String ipAddress) throws IOException {
         log.info("Pinging server with IP address: {}", ipAddress);
         Server server = serverRepository.findByIpAddress(ipAddress);
         InetAddress address = InetAddress.getByName(ipAddress);
-        server.setStatus(address.isReachable(10000) ? Status.SERVER_UP : Status.SERVER_DOWN);
+        log.info("Server status before  ping: {}", server.getStatus());
+        server.setStatus(address.isReachable(10000) ? SERVER_UP : SERVER_DOWN);
+        log.info("Server status after ping: {}", server.getStatus());
         serverRepository.save(server);
         return server;
     }
@@ -77,5 +82,16 @@ public class ServerServiceImpl implements ServerService {
                 .path("/static/images/" + imagesNames[new Random()
                         .nextInt(4)]).toUriString();
 
+    }
+
+    private boolean isReachable(String ipAddress, int port, int timeOut) {
+        try {
+            try (Socket socket = new Socket()) {
+                socket.connect(new InetSocketAddress(ipAddress, port), timeOut);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

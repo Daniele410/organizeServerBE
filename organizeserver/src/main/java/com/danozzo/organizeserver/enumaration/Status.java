@@ -6,11 +6,12 @@ public enum Status {
 
     private final String status;
 
-    Status(String status){
+    Status(String status) {
         this.status = status;
     }
 
-    public String getStatus(){
+    public String getStatus() {
         return this.status;
     }
+
 }
