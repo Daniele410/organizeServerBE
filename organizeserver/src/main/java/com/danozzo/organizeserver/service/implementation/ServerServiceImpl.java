@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -37,9 +36,9 @@ public class ServerServiceImpl implements ServerService {
         return serverRepository.save(server);
     }
 
-
+    @SneakyThrows
     @Override
-    public Server ping(String ipAddress) throws IOException {
+    public Server ping(String ipAddress) {
         log.info("Pinging server with IP address: {}", ipAddress);
         Server server = serverRepository.findByIpAddress(ipAddress);
         InetAddress address = InetAddress.getByName(ipAddress);

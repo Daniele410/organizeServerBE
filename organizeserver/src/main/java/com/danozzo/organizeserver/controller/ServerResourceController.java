@@ -1,6 +1,5 @@
-package com.danozzo.organizeserver.resource;
+package com.danozzo.organizeserver.controller;
 
-import com.danozzo.organizeserver.enumaration.Status;
 import com.danozzo.organizeserver.model.Response;
 import com.danozzo.organizeserver.model.Server;
 import com.danozzo.organizeserver.service.ServerService;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 
 import static com.danozzo.organizeserver.enumaration.Status.SERVER_UP;
 import static java.time.LocalDateTime.now;
@@ -22,10 +22,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/server")
 @RequiredArgsConstructor
-public class ServerResource {
+public class ServerResourceController {
 
     private final ServerService serverService;
 
@@ -42,8 +43,9 @@ public class ServerResource {
         );
     }
 
+    @SneakyThrows
     @GetMapping("/ping/{ipAddress}")
-    public ResponseEntity<Response> pingServer(@PathVariable("ipAddress") String ipAddress) throws IOException {
+    public ResponseEntity<Response> pingServer(@PathVariable("ipAddress") String ipAddress) {
         Server server = serverService.ping(ipAddress);
         return ResponseEntity.ok(
                 Response.builder()
