@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Server {
+public class  Server {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

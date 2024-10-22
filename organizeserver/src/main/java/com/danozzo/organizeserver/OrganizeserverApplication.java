@@ -8,17 +8,21 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootApplication
-public class OrganizeserverApplication {
+public class OrganizeServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrganizeserverApplication.class, args);
+        SpringApplication.run(OrganizeServerApplication.class, args);
     }
 
     @Bean
@@ -59,7 +63,7 @@ public class OrganizeserverApplication {
         };
     }
 
-    @Bean
+   /* @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
@@ -74,5 +78,7 @@ public class OrganizeserverApplication {
 
 
         return new CorsFilter(source);
-    }
+    }*/
+
+
 }
